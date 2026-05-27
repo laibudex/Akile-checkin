@@ -162,6 +162,24 @@ class AkileCheckin:
     def check_in(self):
         checkin_page = "https://akile.ai/console/ak-coin-shop"
         self.browser.get(checkin_page)
+        time.sleep(2)
+
+        # 关闭可能出现的弹窗
+        try:
+            close_btn = self.browser.find_element(
+                By.CSS_SELECTOR,
+                '.arco-modal-close-btn, .arco-modal-close, [class*="close"]',
+            )
+            close_btn.click()
+            time.sleep(0.5)
+        except Exception:
+            pass
+
+        # 强制移除所有可能的遮挡层
+        self.browser.execute_script("""
+            document.querySelectorAll('.arco-modal-wrapper, .arco-modal-mask, .arco-modal').forEach(m => m.remove());
+            document.body.style.overflow = '';
+        """)
 
         # 签到前的积分（对于已签到过的用户这个积分就是签到后的积分）
         try:
@@ -191,7 +209,7 @@ class AkileCheckin:
                     )
                 )
             )
-            checkin_button.click()
+            self.browser.execute_script("arguments[0].click();", checkin_button)
             time.sleep(3)  # 防止点击签到动作未发出
 
             try:
