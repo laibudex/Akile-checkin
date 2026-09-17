@@ -34,3 +34,9 @@ jobs:
           AKILE_PASSWORD: ${{ secrets.AKILE_PASSWORD }}
           AKILE_PUSH_KEY: ${{ secrets.AKILE_PUSH_KEY }}
         run: python Akile-Checkin.py
+
+      # ====== 新增：自动刷新 60 天闲置限制 ======
+      - name: Keep workflow active
+        uses: liskin/gh-workflow-keepalive@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
